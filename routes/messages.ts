@@ -23,4 +23,23 @@ messagesRouter.post("/", async (req, res) => {
     }
 });
 
+messagesRouter.get("/", async (req, res) => {
+    try {
+        let AllMessages: IMessages[] = [];
+
+        const files = await fs.readdir(path);
+        let message = null
+
+        for (const file of files) {
+            message = fs.readFile(`${path}/${file}`, 'utf-8');
+            AllMessages.push(JSON.parse(await message));
+        }
+
+        res.send(AllMessages.reverse().slice(0, 5));
+
+    } catch (e) {
+        console.error(e);
+    }
+})
+
 export default messagesRouter;
